@@ -34,15 +34,48 @@ window.addEventListener('DOMContentLoaded', () => {
   // choose category
   function selectCat() {
     if (chosenCategory === categories[0]) {
-      showCategory.textContent = 'Your category: Countries'
+      showCategory.textContent = 'Your category: Countries';
+    } else if (chosenCategory === categories[1]) {
+      showCategory.textContent = 'Your category: Programming language and Frameworks';
+    } else if (chosenCategory === categories[2]) {
+      showCategory.textContent = 'Your category: Animals';
     }
-    else if (chosenCategory === categories[1]) {
-      showCategory.textContent = 'Your category: Programming language and Frameworks'
+  }
+
+  function result() {
+    let wordHolder = document.querySelector('#hold'),
+      correct = document.createElement('ul')
+
+    for (let i = 0; i < word.length; i++) {
+      correct.setAttribute('id', 'my-word')
+      let guess = document.createElement('li')
+      guess.setAttribute('class', 'guess')
+
+      if (word[i] === '-') {
+        guess.innerHTML = '-'
+        space = 1
+      } else {
+        guess.innerHTML = '_'
+      }
+
+      guesses.push(guess)
+      wordHolder.appendChild(correct)
+      correct.appendChild(guess)
     }
-    else if (chosenCategory === categories[2]) {
-      showCategory.textContent = 'Your category: Animals'
+  }
 
+  // show current state
+  function comments() {
+    showLives = `Lives left: ${lives}`
+    if (lives < 1) {
+      showLives.innerHTML = 'Game over'
+    }
 
+    for (let i = 0; i < guesses.length; i++) {
+      if (counter + space === guesses.length) {
+        showLives.innerHTML = 'Done!'
+
+      }
     }
   }
 
@@ -64,6 +97,8 @@ window.addEventListener('DOMContentLoaded', () => {
   console.log(word)
   createButtons()
   selectCat()
+  result()
+  comments()
 
 }
 
