@@ -31,25 +31,42 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-// func for running program
-function play() {
-  categories = [
-    // Countries
-    ["Singapure", "Malaysia", "China", "Japan", "South Korea"],
-    // Programming language and Frameworks
-    ["Ruby on Rails", "Javascript", "Cplusplus", "Python", "Golang", "React", "Vue"],
-    // Animals
-    ["Cangaroo", "Bear", "Doggy", "Kitty", "Dragon"],
-  ]
-  
-  chosenCategory = categories[Math.floor(Math.random() * categories.length)]
-  word = chosenCategory[Math.floor(Math.random() * chosenCategory.length)]
-  word = word.replace(/\s/gi, '-')
+  // choose category
+  function selectCat() {
+    if (chosenCategory === categories[0]) {
+      showCategory.textContent = 'Your category: Countries'
+    }
+    else if (chosenCategory === categories[1]) {
+      showCategory.textContent = 'Your category: Programming language and Frameworks'
+    }
+    else if (chosenCategory === categories[2]) {
+      showCategory.textContent = 'Your category: Animals'
+
+
+    }
+  }
+
+  // func for running program
+  function play() {
+    categories = [
+      // Countries
+      ["Singapure", "Malaysia", "China", "Japan", "South Korea"],
+      // Programming language and Frameworks
+      ["Ruby on Rails", "Javascript", "Cplusplus", "Python", "Golang", "React", "Vue"],
+      // Animals
+      ["Cangaroo", "Bear", "Doggy", "Kitty", "Dragon"],
+    ]
+
+    chosenCategory = categories[Math.floor(Math.random() * categories.length)]
+    word = chosenCategory[Math.floor(Math.random() * chosenCategory.length)]
+    word = word.replace(/\s/gi, '-')
 
   console.log(word)
   createButtons()
+  selectCat()
 
 }
+
 play()
 
 });
