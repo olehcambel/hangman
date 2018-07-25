@@ -21,23 +21,35 @@ window.addEventListener('DOMContentLoaded', () => {
     let myButtons = document.querySelector('#buttons'),
     letters = document.createElement('ul')
 
-  for (let i = 0; i < alphabet.length; i++) {
-    letters.id = 'alphabet'
-    let list = document.createElement('li')
-    list.innerHTML = alphabet[i]  
-    myButtons.appendChild(letters)
-    letters.appendChild(list)
-  
+    for (let i = 0; i < alphabet.length; i++) {
+      letters.id = 'alphabet'
+      let list = document.createElement('li')
+      list.innerHTML = alphabet[i]
+      myButtons.appendChild(letters)
+      letters.appendChild(list)
+
+    }
   }
+
+// func for running program
+function play() {
+  categories = [
+    // Countries
+    ["Singapure", "Malaysia", "China", "Japan", "South Korea"],
+    // Programming language and Frameworks
+    ["Ruby on Rails", "Javascript", "Cplusplus", "Python", "Golang", "React", "Vue"],
+    // Animals
+    ["Cangaroo", "Bear", "Doggy", "Kitty", "Dragon"],
+  ]
+  
+  chosenCategory = categories[Math.floor(Math.random() * categories.length)]
+  word = chosenCategory[Math.floor(Math.random() * chosenCategory.length)]
+  word = word.replace(/\s/gi, '-')
+
+  console.log(word)
+  createButtons()
+
 }
-
-createButtons()
-
-  // for (let i = 0; i < alphabet.length; i++) {
-  //   letters.id = 'alphabet'
-  //   let list = document.createElement('li')
-  //   list.innerHTML = alphabet[i]  
-  //   myButtons.appendChild(list)
-  // }
+play()
 
 });
