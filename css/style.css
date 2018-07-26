@@ -46,7 +46,7 @@ p {
   display: table;
   clear: both;
 }
-#alphabet li {
+#alphabet li.letter {
   float: left;
   margin: 0 10px 10px 0;
   list-style: none;
@@ -62,7 +62,7 @@ p {
   -khtml-border-radius: 5px;
   border: solid 1px #fff;
 }
-#alphabet li:hover {
+#alphabet li.letter:hover {
   background: #c1d72e;
   border: solid 1px #fff;
   color: #fff;

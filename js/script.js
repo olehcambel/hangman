@@ -1,60 +1,66 @@
 window.addEventListener('DOMContentLoaded', () => {
   const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-
   let categories, //Themes
-    chosenCategory,
+    choseCategory,
     word,
     guesses = [], // array of user's attempts
     lives,
-    counter, // amount of guesses letters
+    counter, // amount of guessed letters
     space, // Space in word
-    list, letters
-  // let context = null, correct
+    letter,
+    letters;
+  let context = null
 
-
-  let showLives = document.querySelector('#mylives'),
-    showCategory = document.querySelector('#categoryName'),
-    getHint = document.querySelector('#hint'),
+  let showCategory = document.querySelector('#categoryName'),
+    showLives = document.querySelector('#mylives'),
     showClue = document.querySelector('#clue'),
+    hint = document.querySelector('#hint'),
     reset = document.querySelector('#reset');
+  
+  document.addEventListener('mousedown', event => {
+    event.preventDefault();
+  });
 
-  // debugger
   function createButtons() {
-    let myButtons = document.querySelector('#buttons')
-      letters = document.createElement('ul');
+    let alphabetButtons = document.querySelector('#buttons');
+    letters = document.createElement('ul');
+    letters.id = 'alphabet';
+    letters.addEventListener('click', checkHandleClick);
+   
+    alphabetButtons.appendChild(letters);
 
-    for (let i = 0; i < alphabet.length; i++) {
-      letters.id = 'alphabet';
-       list = document.createElement('li');
-      list.innerHTML = alphabet[i];
-      check()
-      myButtons.appendChild(letters);
-      letters.appendChild(list);
+    for (let prop of alphabet) {
+      letter = document.createElement('li');
+      letter.innerHTML = prop;
+      letter.className = 'letter'
+      letters.appendChild(letter);
+
     }
   }
 
   // choose category
   function selectCat() {
-    if (chosenCategory === categories[0]) {
+    if (choseCategory === categories[0]) {
       showCategory.textContent = 'Your category: Countries';
-    } else if (chosenCategory === categories[1]) {
+    } else if (choseCategory === categories[1]) {
       showCategory.textContent =
         'Your category: Programming language and Frameworks';
-    } else if (chosenCategory === categories[2]) {
+    } else if (choseCategory === categories[2]) {
       showCategory.textContent = 'Your category: Animals';
     }
   }
 
   function result() {
-    let wordHolder = document.querySelector('#hold')
-      correct = document.createElement('ul');
+    let wordHolder = document.querySelector('#hold');
+    correct = document.createElement('ul');
+    correct.id = 'my-word'
+    wordHolder.appendChild(correct);
 
-    for (let i = 0; i < word.length; i++) {
-      correct.setAttribute('id', 'my-word');
+    for (let prop of word) {
+
       let guess = document.createElement('li');
-      guess.setAttribute('class', 'guess');
-
-      if (word[i] === '-') {
+      guess.classList.add('guess')
+      if (prop === '-') {
         guess.innerHTML = '-';
         space = 1;
       } else {
@@ -62,9 +68,9 @@ window.addEventListener('DOMContentLoaded', () => {
       }
 
       guesses.push(guess);
-      wordHolder.appendChild(correct);
       correct.appendChild(guess);
     }
+
   }
 
   // show current state
@@ -72,17 +78,21 @@ window.addEventListener('DOMContentLoaded', () => {
     showLives.innerHTML = `Lives left: ${lives}`;
     if (lives < 1) {
       showLives.innerHTML = 'Game over';
+      gameFinished()
 
     }
 
-    // for (let i = 0; i < guesses.length; i++) {
     if (counter + space === guesses.length) {
       showLives.innerHTML = 'Done!';
-    list.removeEventListener('click', checkHandleClick, true );
+      gameFinished()
 
-
-      // }
     }
+  }
+
+  function gameFinished() {
+
+    letters.removeEventListener('click', checkHandleClick);
+    setTimeout(() => startAgain(), 3000)
   }
 
   // draw Man
@@ -92,7 +102,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   // Hangman
-  canvas = function() {
+  canvas = () => {
     myStickman = document.getElementById('stickman');
     context = myStickman.getContext('2d');
     context.beginPath();
@@ -100,7 +110,7 @@ window.addEventListener('DOMContentLoaded', () => {
     context.lineWidth = 2;
   };
 
-  head = function() {
+  head = () => {
     myStickman = document.getElementById('stickman');
     context = myStickman.getContext('2d');
     context.beginPath();
@@ -108,70 +118,40 @@ window.addEventListener('DOMContentLoaded', () => {
     context.stroke();
   };
 
-  draw = function($pathFromx, $pathFromy, $pathTox, $pathToy) {
+  draw = ($pathFromx, $pathFromy, $pathTox, $pathToy) => {
     context.moveTo($pathFromx, $pathFromy);
     context.lineTo($pathTox, $pathToy);
     context.stroke();
   };
 
-  frame1 = function() {
-    draw(0, 150, 150, 150);
-  };
-
-  frame2 = function() {
-    draw(10, 0, 10, 600);
-  };
-
-  frame3 = function() {
-    draw(0, 5, 70, 5);
-  };
-
-  frame4 = function() {
-    draw(60, 5, 60, 15);
-  };
-
-  torso = function() {
-    draw(60, 36, 60, 70);
-  };
-
-  rightArm = function() {
-    draw(60, 46, 100, 50);
-  };
-
-  leftArm = function() {
-    draw(60, 46, 20, 50);
-  };
-
-  rightLeg = function() {
-    draw(60, 70, 100, 100);
-  };
-
-  leftLeg = function() {
-    draw(60, 70, 20, 100);
-  };
+  frame1 = () => { draw(0, 150, 150, 150); };
+  frame2 = () => { draw(10, 0, 10, 600); };
+  frame3 = () => { draw(0, 5, 70, 5); };
+  frame4 = () => { draw(60, 5, 60, 15); };
+  torso = () => { draw(60, 36, 60, 70); };
+  rightArm = () => { draw(60, 46, 100, 50); };
+  leftArm = () => { draw(60, 46, 20, 50); };
+  rightLeg = () => { draw(60, 70, 100, 100); };
+  leftLeg = () => { draw(60, 70, 20, 100); };
 
   drawArray = [rightLeg, leftLeg, rightArm, leftArm, torso, head, frame4, frame3, frame2, frame1];
 
-  function check() {
-    // debugger
-    // doc
-    list.addEventListener('click', checkHandleClick );
-  }
-  
-  function checkHandleClick() {
+  function checkHandleClick(event) {
+    let letter = event.target
+    if (letter.className.includes('active') || letter.className === '') return
+
     // get pressed letter
-    let context = this.innerHTML;
-    this.setAttribute('class', 'active');
-  
-    for (let i = 0; i < word.length; i++) {
-      // check each letter which pressed
-      if (word[i] === context) {
-        guesses[i].innerHTML = context;
-        counter += 1;
-      }
+    let pressedLetter = letter.innerHTML;
+    letter.classList.add('active')
+
+
+    let regexp = new RegExp(pressedLetter, 'g'), result
+    while (result = regexp.exec(word)) {
+      guesses[result.index].innerHTML = result[0]
+      counter += 1
     }
-  
-    let j = word.indexOf(context);
+
+    let j = word.indexOf(pressedLetter);
     // check if letter includes
     if (j === -1) {
       lives -= 1;
@@ -180,68 +160,60 @@ window.addEventListener('DOMContentLoaded', () => {
     } else {
       comments();
     }
-
-
   }
 
   // func for running program
   function play() {
-    categories = [
-      // Countries
-      ['singapure', 'malaysia', 'china', 'japan', 'south korea'],
-      // Programming language and Frameworks
-      [
-        'ruby on rails',
-        'javascript',
-        'c plus plus',
-        'python',
-        'golang',
-        'react',
-        'vue'
-      ],
-      // Animals
-      ['cangaroo', 'bear', 'doggy', 'kitty', 'dragon']
-    ];
+    categories = [// Countries
+      ['singapure', 'malaysia', 'china', 'japan', 'south korea'], 
+      ['ruby on rails', 'javascript', 'c plus plus', 'python', 'golang', 'react', 'vue'], 
+      // Animals // Programming language and Frameworks
+      ['cangaroo', 'bear', 'doggy', 'kitty', 'dragon']];
 
-    chosenCategory = categories[Math.floor(Math.random() * categories.length)];
-    word = chosenCategory[Math.floor(Math.random() * chosenCategory.length)];
+    choseCategory = categories[Math.floor(Math.random() * categories.length)];
+    word = choseCategory[Math.floor(Math.random() * choseCategory.length)];
     word = word.replace(/\s/g, '-');
     console.log(word);
 
     lives = 10;
     counter = 0;
     space = 0;
-    guesses = []
+    guesses = [];
 
     createButtons();
+    selectCat();
     result();
     comments();
-    selectCat();
     canvas();
   }
 
   play();
 
-  getHint.addEventListener('click', function () {
-
+  // Hint
+  hint.addEventListener('click', getHint);
+  
+  function getHint() {
     hints = [
-      ["Based in Mersyside", "Based in Mersyside", "First Welsh team to reach the Premier Leauge", "Owned by A russian Billionaire", "Once managed by Phil Brown", "2013 FA Cup runners up", "Gazza's first club"],
-      ["Science-Fiction horror film", "1971 American action film", "Historical drama", "Anamated Fish", "Giant great white shark"],
-      ["Northern city in the UK", "Home of AC and Inter", "Spanish capital", "Netherlands capital", "Czech Republic capital"]
+      ['singapure', 'malaysia', 'china', 'japan', 'south korea'],
+      ['ruby on rails', 'javascript', 'c plus plus', 'python', 'golang', 'react', 'vue'],
+      ['cangaroo', 'bear', 'doggy', 'kitty', 'dragon']
     ];
-debugger
-    let categoryIndex = categories.indexOf(chosenCategory);
-    let hintIndex = chosenCategory.indexOf(word);
-    showClue.innerHTML = "Подсказка: - " + hints[categoryIndex][hintIndex];
-  });
+    let categoryIndex = categories.indexOf(choseCategory);
+    let hintIndex = choseCategory.indexOf(word.replace(/-/g, ' '));
+    showClue.innerHTML = 'Hint: ' + hints[categoryIndex][hintIndex];
+
+  }
 
   // Reset
-   reset = document.getElementById('reset');
-  reset.addEventListener('click', function () {
-    correct.parentNode.removeChild(correct);
+  reset.addEventListener('click', startAgain);
+  
+  function startAgain() {
     letters.parentNode.removeChild(letters);
-    showClue.innerHTML = "";
+    correct.parentNode.removeChild(correct);
+    showClue.innerHTML = '';
     context.clearRect(0, 0, 400, 400);
     play();
-  });
+
+  }
+
 });
